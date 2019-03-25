@@ -1,0 +1,6 @@
+.nextflow
+db.sqlite3
+conda/
+*.nextflow.log*
+*.nextflow.pid
+*__pycache__*
