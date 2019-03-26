@@ -6,3 +6,4 @@ conda/
 *__pycache__*
 logs/*
 django.sqlite3
+dashboard.sqlite3
