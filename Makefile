@@ -2,6 +2,9 @@ SHELL:=/bin/bash
 UNAME:=$(shell uname)
 export LOG_DIR:=logs
 
+# install app
+install: conda-install
+
 # ~~~~~ Setup Conda ~~~~~ #
 # this sets the system PATH to ensure we are using in included 'conda' installation for all software
 PATH:=$(CURDIR)/conda/bin:$(PATH)
@@ -26,11 +29,18 @@ conda:
 	bash "$(CONDASH)" -b -p conda && \
 	rm -f "$(CONDASH)"
 
-# install the conda packages required
+# install the conda and python packages required
+# NOTE: **MUST** install ncurses from conda-forge for RabbitMQ to work!!
 conda-install: conda
-	conda install -y -c anaconda \
+	conda install -y conda-forge::ncurses && \
+	conda install -y -c anaconda -c bioconda \
 	django=2.1.5 \
-	nextflow=19.01.0
+	nextflow=19.01.0 \
+	celery=4.2.1 \
+	rabbitmq-server=3.7.13 && \
+	pip install \
+	django-celery-results==1.0.4 \
+	django-celery-beat==1.4.0
 
 test1:
 	nextflow -version
