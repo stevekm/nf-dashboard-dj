@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+NXF_WEBLOG = os.environ.get('NXF_WEBLOG')
+NXF_LOG = os.environ.get('NXF_LOG')
+NXF_SCRIPT = os.environ.get('NXF_SCRIPT')
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG_DIR = os.path.realpath(os.environ.get('LOG_DIR', 'logs'))
@@ -129,7 +133,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': DJANGO_DB, # os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-    'dashboard': {
+    'dashboard_db': {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': DASHBOARD_DB,
     },

@@ -15,11 +15,16 @@ sys.path.pop(0)
 logger = logging.getLogger()
 logger.debug("Loading celery module...")
 
-rabbitmq_nodename = os.environ.get('RABBITMQ_NODENAME', 'localhost')
-broker_url = "amqp://{0}".format(rabbitmq_nodename)
+RABBITMQ_NODENAME = os.environ.get('RABBITMQ_NODENAME', 'localhost')
+RABBITMQ_NODE_IP_ADDRESS = os.environ.get('RABBITMQ_NODE_IP_ADDRESS', '127.0.0.1')
+RABBITMQ_NODE_PORT = os.environ.get('RABBITMQ_NODE_PORT', 'localhost')
+broker_url = "amqp://{0}:{1}".format(RABBITMQ_NODE_IP_ADDRESS, RABBITMQ_NODE_PORT)
 # logger.debug(broker_url)
 
-app = Celery('dashboard', broker_url = broker_url, backend='django-db')
+app = Celery('dashboard',
+    broker_url = broker_url,
+    broker='amqp://',
+    backend='django-db')
 
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html
 app.conf.update(
@@ -36,6 +41,6 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
-# @app.task(bind=True)
-# def debug_task(self):
-#     print('Request: {0!r}'.format(self.request))
+@app.task(bind=True)
+def debug_task(self):
+    print('Request: {0!r}'.format(self.request))

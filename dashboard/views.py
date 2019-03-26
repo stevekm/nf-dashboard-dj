@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import NxfRun, NxfLogMessage
 from .tasks import add
+from .settings import NXF_WEBLOG, NXF_LOG, NXF_SCRIPT
 # from .forms import NextflowStartForm
 import logging
 import subprocess as sp
@@ -27,7 +28,9 @@ def start_pipeline(request):
     if request.method == 'POST':
         # form = NextflowStartForm(request.POST)
         # print(form)
-        command = ['nextflow', 'help']
+        # nextflow -log "$(NXF_LOG)" run nxf/main.nf -with-weblog "$(NXF_WEBLOG)" # -bg
+        # command = ['nextflow', 'help']
+        command = ['nextflow', '-log', NXF_LOG, 'run', NXF_SCRIPT, '-with-weblog', NXF_WEBLOG ]
         process = sp.Popen(command,
             stdout = sp.PIPE,
             stderr = sp.PIPE,
@@ -42,6 +45,7 @@ def start_pipeline(request):
 @csrf_exempt
 def listen(request):
     """
+    Listen for HTTP messages from Nextflow pipeline
     """
     if request.method == 'POST':
         message_json = request.body
@@ -66,3 +70,12 @@ def listen(request):
             utcTime = utcTime,
             body_json = message_json)
         return HttpResponse("")
+
+@csrf_exempt
+def test(request):
+    """
+    test using Celery task to run in the background; eventually need to use this for the Nextflow pipeline running
+    """
+    if request.method == 'POST':
+        logger.info("running async demo add task with celery")
+        res = add.delay(4, 4)

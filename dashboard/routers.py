@@ -21,10 +21,6 @@ class Router(object):
 
     def allow_relation(self, obj1, obj2, **hints):
         """Determine if relationship is allowed between two objects."""
-
-        if obj1._meta.model_name.lower().startswith('pmkb') and obj2._meta.model_name.lower().startswith('pmkb'):
-            return True
-
         # Allow any relation between two models that are both in the dashboard app.
         if obj1._meta.app_label == 'dashboard' and obj2._meta.app_label == 'dashboard':
             return True

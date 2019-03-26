@@ -21,4 +21,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('listen/', views.listen, name='listen'),
     path('start/', views.start_pipeline, name='start_pipeline'),
+    path('test/', views.test, name='test'),
 ]
