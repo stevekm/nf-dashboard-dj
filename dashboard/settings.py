@@ -14,7 +14,47 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOG_DIR = os.path.realpath(os.environ.get('LOG_DIR', 'logs'))
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'formatters': {
+        'custom': {
+            'datefmt' : '%Y-%m-%d %H:%M:%S',
+            'format': '[%(asctime)s] %(levelname)s (%(name)s:%(module)s:%(funcName)s:%(lineno)d) %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'debug.log'),
+            'formatter': 'custom',
+        },
+        'console_custom' : {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'custom',
+        }
+    },
+    'loggers': {
+        '' : { # catch-all logger
+            'handlers': ['console_custom', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+            }
+    }
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/

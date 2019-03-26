@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import NxfRun, NxfLogMessage
+# from .forms import NextflowStartForm
 import logging
+import subprocess as sp
 
 logger = logging.getLogger()
 logger.info("loading views")
@@ -14,7 +16,27 @@ def index(request):
     Return the main page
     """
     logger.info("processing index request")
-    return HttpResponse("Hello world")
+    template = "dashboard/index.html"
+    context = {}
+    return render(request, template, context)
+
+def start_pipeline(request):
+    """
+    """
+    if request.method == 'POST':
+        # form = NextflowStartForm(request.POST)
+        # print(form)
+        command = ['nextflow', 'help']
+        process = sp.Popen(command,
+            stdout = sp.PIPE,
+            stderr = sp.PIPE,
+            shell = False,
+            universal_newlines = True)
+        proc_stdout, proc_stderr = process.communicate()
+        print(proc_stdout, proc_stderr, process.returncode)
+        return HttpResponse("")
+    # else:
+    #     return render(request, 'name.html', {'form': form})
 
 @csrf_exempt
 def listen(request):

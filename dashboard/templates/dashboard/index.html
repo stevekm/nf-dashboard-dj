@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    * {
+      font-family: sans-serif;
+    }
+</style>
+<head>
+  <title>Nextflow Dashboard</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <form action="/start/" method="post" target="dummyframe">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+    <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+</form>
+</body>
+</html>

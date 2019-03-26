@@ -4,3 +4,4 @@ conda/
 *.nextflow.log*
 *.nextflow.pid
 *__pycache__*
+logs/*
