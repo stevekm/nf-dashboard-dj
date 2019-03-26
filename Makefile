@@ -3,7 +3,7 @@ UNAME:=$(shell uname)
 export LOG_DIR:=logs
 
 # install app
-install: conda-install
+install: conda-install init
 
 # ~~~~~ Setup Conda ~~~~~ #
 # this sets the system PATH to ensure we are using in included 'conda' installation for all software
@@ -46,7 +46,8 @@ test1:
 	nextflow -version
 
 # ~~~~~ SETUP DJANGO APP ~~~~~ #
-export DJANGO_DB:=db.sqlite3
+export DJANGO_DB:=django.sqlite3
+export DASHBOARD_DB:=dashboard.sqlite3
 # create the app for development; only need to run this when first creating repo
 django-start:
 	django-admin startproject dashboard .
@@ -73,7 +74,7 @@ nuke:
 	@echo ">>> Removing database items:"; \
 	rm -rfv dashboard/migrations/__pycache__ && \
 	rm -fv dashboard/migrations/0*.py
-	rm -fv "$(DJANGO_DB)"
+	rm -fv "$(DASHBOARD_DB)"
 
 
 

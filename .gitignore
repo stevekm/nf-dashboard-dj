@@ -5,3 +5,4 @@ conda/
 *.nextflow.pid
 *__pycache__*
 logs/*
+django.sqlite3

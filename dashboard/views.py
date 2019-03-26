@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import NxfRun, NxfLogMessage
+from .tasks import add
 # from .forms import NextflowStartForm
 import logging
 import subprocess as sp

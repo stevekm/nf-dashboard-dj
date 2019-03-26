@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG_DIR = os.path.realpath(os.environ.get('LOG_DIR', 'logs'))
+DJANGO_DB = os.path.realpath(os.environ.get('DJANGO_DB', "django.sqlite3"))
+DASHBOARD_DB = os.path.realpath(os.environ.get('DASHBOARD_DB', "dashboard.sqlite3"))
 
 LOGGING = {
     'version': 1,
@@ -77,7 +79,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dashboard'
+    'dashboard',
+    'django_celery_results',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -113,14 +117,25 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'NAME': DJANGO_DB, # os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'dashboard': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': DASHBOARD_DB,
+    },
 }
 
+DATABASE_ROUTERS = ['dashboard.routers.Router']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -159,3 +174,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
+CELERY_RESULT_BACKEND = 'django-db'
