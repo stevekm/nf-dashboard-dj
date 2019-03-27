@@ -22,6 +22,7 @@ def index(request):
     context = {}
     return render(request, template, context)
 
+@csrf_exempt
 def start_pipeline(request):
     """
     """

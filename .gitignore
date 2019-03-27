@@ -7,3 +7,4 @@ conda/
 logs/*
 django.sqlite3
 dashboard.sqlite3
+nxf/work/
