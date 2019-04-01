@@ -34,10 +34,17 @@ make runserver
 
 Navigate to `http://127.0.0.1:8000/` in your web browser and click the "Start" button to run a Nextflow pipeline
 
-![Screen Shot 2019-04-01 at 4 09 22 PM](https://user-images.githubusercontent.com/10505524/55356455-c2b64c80-5498-11e9-9a61-95e59ba054ff.png)
+![Screen Shot 2019-04-01 at 4 18 48 PM](https://user-images.githubusercontent.com/10505524/55356933-dca45f00-5499-11e9-81c0-5500ef68f606.png)
 
 Check out the Nextflow `weblog` messages in the Django admin panel at `http://127.0.0.1:8000/admin`
 
 ![Screen Shot 2019-04-01 at 4 13 31 PM](https://user-images.githubusercontent.com/10505524/55356618-280a3d80-5499-11e9-9208-02b477b0a9e1.png)
 
 ![Screen Shot 2019-04-01 at 4 13 56 PM](https://user-images.githubusercontent.com/10505524/55356642-39ebe080-5499-11e9-8c27-6e4e3d8f6000.png)
+
+
+When finished, shut down Celery and RabbitMQ:
+
+```
+make celery-stop rabbitmq-stop
+```
