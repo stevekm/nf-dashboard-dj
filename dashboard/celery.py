@@ -18,11 +18,12 @@ logger.debug("Loading celery module...")
 RABBITMQ_NODENAME = os.environ.get('RABBITMQ_NODENAME', 'localhost')
 RABBITMQ_NODE_IP_ADDRESS = os.environ.get('RABBITMQ_NODE_IP_ADDRESS', '127.0.0.1')
 RABBITMQ_NODE_PORT = os.environ.get('RABBITMQ_NODE_PORT', 'localhost')
-broker_url = "amqp://{0}:{1}".format(RABBITMQ_NODE_IP_ADDRESS, RABBITMQ_NODE_PORT)
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+# broker_url = "amqp://{0}:{1}".format(RABBITMQ_NODE_IP_ADDRESS, RABBITMQ_NODE_PORT)
 # logger.debug(broker_url)
 
 app = Celery('dashboard',
-    broker_url = broker_url,
+    broker_url = CELERY_BROKER_URL,
     broker='amqp://',
     backend='django-db')
 

@@ -58,6 +58,11 @@ LOGGING = {
             'handlers': ['console_custom', 'file'],
             'level': 'DEBUG',
             'propagate': True,
+            },
+        'dashboard' : {
+            'handlers': ['console_custom', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
             }
     }
 }
@@ -119,20 +124,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'dashboard.wsgi.application'
 
 
-# Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
+    # Django admin and user database
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DJANGO_DB, # os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': DJANGO_DB,
     },
+    # Nextflow web dashboard database
     'dashboard_db': {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': DASHBOARD_DB,
@@ -178,5 +177,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
 # http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
 CELERY_RESULT_BACKEND = 'django-db'

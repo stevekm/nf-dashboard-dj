@@ -14,12 +14,17 @@ class NxfRun(models.Model):
 class NxfLogMessage(models.Model):
     """
     """
-    runId = models.ForeignKey(NxfRun, on_delete=models.SET_DEFAULT, default = '')
+    runId = models.ForeignKey(NxfRun, on_delete=models.CASCADE)
     runName = models.CharField(max_length=255, blank = False)
     event = models.CharField(max_length=255, blank = False)
     runStatus = models.CharField(max_length=255, blank = False)
-    utcTime = models.CharField(max_length=255, blank = False)
+    utcTime = models.DateTimeField()
     body_json = models.TextField()
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    
+    def __str__(self):
+        return("{0} {1} {2}".format(
+        self.runName,
+        self.event,
+        self.utcTime
+        ))

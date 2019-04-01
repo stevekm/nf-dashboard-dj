@@ -34,6 +34,7 @@ conda:
 conda-install: conda
 	conda install -y conda-forge::ncurses && \
 	conda install -y -c anaconda -c bioconda \
+	python=3.7 \
 	django=2.1.5 \
 	nextflow=19.01.0 \
 	celery=4.2.1 \
@@ -105,7 +106,7 @@ export RABBITMQ_LOGS:=rabbitmq.log
 export RABBITMQ_PID_FILE:=$(RABBITMQ_LOG_BASE)/rabbitmq.pid
 CELERY_PID_FILE:=$(LOG_DIR_ABS)/celery.pid
 CELERY_LOGFILE:=$(LOG_DIR_ABS)/celery.log
-CELERY_BROKER_URL:=amqp://$(RABBITMQ_NODE_IP_ADDRESS):$(RABBITMQ_NODE_PORT)
+export CELERY_BROKER_URL:=amqp://$(RABBITMQ_NODE_IP_ADDRESS):$(RABBITMQ_NODE_PORT)
 celery-start:
 	celery worker \
 	--app dashboard \

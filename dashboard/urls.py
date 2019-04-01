@@ -20,6 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('listen/', views.listen, name='listen'),
-    path('start/', views.start_pipeline, name='start_pipeline'),
+    path('start/', views.start, name='start'),
     path('test/', views.test, name='test'),
 ]
