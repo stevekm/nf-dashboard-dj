@@ -37,14 +37,16 @@ conda-install: conda
 	python=3.7 \
 	django=2.1.5 \
 	nextflow=19.01.0 \
-	celery=4.2.1 \
 	rabbitmq-server=3.7.13 && \
 	pip install \
+	celery==4.3.0 \
 	django-celery-results==1.0.4 \
 	django-celery-beat==1.4.0
 
+# celery=4.2.1 \ # not compatible with py3.7...
 test1:
 	nextflow -version
+	conda search celery
 
 # ~~~~~ SETUP DJANGO APP ~~~~~ #
 export DJANGO_DB:=django.sqlite3
@@ -105,17 +107,15 @@ export RABBITMQ_NODE_PORT:=5674
 export RABBITMQ_LOG_BASE:=$(LOG_DIR_ABS)
 export RABBITMQ_LOGS:=rabbitmq.log
 export RABBITMQ_PID_FILE:=$(RABBITMQ_LOG_BASE)/rabbitmq.pid
-CELERY_PID_FILE:=$(LOG_DIR_ABS)/celery.pid
-CELERY_LOGFILE:=$(LOG_DIR_ABS)/celery.log
+CELERY_DEFAULT_PID_FILE:=$(LOG_DIR_ABS)/celery.default.pid
+CELERY_DEFAULT_LOGFILE:=$(LOG_DIR_ABS)/celery.default.log
+CELERY_NEXTFLOW_PID_FILE:=$(LOG_DIR_ABS)/celery.nextflow.pid
+CELERY_NEXTFLOW_LOGFILE:=$(LOG_DIR_ABS)/celery.nextflow.log
 export CELERY_BROKER_URL:=amqp://$(RABBITMQ_NODE_IP_ADDRESS):$(RABBITMQ_NODE_PORT)
+# start 1 concurrent worker for Nextflow and 2 for all other tasks
 celery-start:
-	celery worker \
-	--app dashboard \
-	--loglevel info \
-	--pidfile "$(CELERY_PID_FILE)" \
-	--logfile "$(CELERY_LOGFILE)" \
-	--concurrency=1 \
-	--detach
+	celery worker --app dashboard --loglevel info --pidfile "$(CELERY_DEFAULT_PID_FILE)" --logfile "$(CELERY_DEFAULT_LOGFILE)" --queues=default --concurrency=2 --hostname=default@%h --detach
+	celery worker --app dashboard --loglevel info --pidfile "$(CELERY_NEXTFLOW_PID_FILE)" --logfile "$(CELERY_NEXTFLOW_LOGFILE)" --queues=run_nextflow --concurrency=1 --hostname=nextflow@%h --detach
 
 # interactive for debugging
 celery-start-inter:

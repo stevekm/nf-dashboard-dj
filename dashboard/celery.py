@@ -28,9 +28,14 @@ app = Celery('dashboard',
     backend='django-db')
 
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html
+# http://docs.celeryproject.org/en/latest/userguide/routing.html#id2
 app.conf.update(
     result_backend='django-db',
-    task_track_started=True
+    task_track_started=True,
+    task_routes = {
+        'dashboard.tasks.start_pipeline': {'queue': 'run_nextflow'}
+    },
+    task_default_queue = 'default'
 )
 
 # Using a string here means the worker doesn't have to serialize

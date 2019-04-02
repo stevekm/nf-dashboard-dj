@@ -13,6 +13,7 @@ process print_sampleID {
     output_file = "${sampleID}.txt"
     """
     echo "${sampleID}" > "${output_file}"
+    sleep 15
     """
 }
 sampleID_files.collectFile(name: "sampleIDs.txt", storeDir: "${params.outputDir}")
