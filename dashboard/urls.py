@@ -22,4 +22,5 @@ urlpatterns = [
     path('listen/', views.listen, name='listen'),
     path('start/', views.start, name='start'),
     path('test/', views.test, name='test'),
+    path('runs/', views.runs, name='runs'),
 ]

@@ -1,0 +1,17 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Runs</h2>
+<table>
+    <tr>
+        <th>Run Name</th>
+        <th>Run ID</th>
+    </tr>
+{% for run in all_runs %}
+    <tr>
+    <td>{{run.runName}}</td>
+    <td>{{run.runId}}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

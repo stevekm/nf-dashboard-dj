@@ -48,3 +48,19 @@ When finished, shut down Celery and RabbitMQ:
 ```
 make celery-stop rabbitmq-stop
 ```
+
+# Software
+
+all required dependencies are supplied via the included conda installation (`make conda-install`)
+
+- Python 3.7
+
+- Nextflow
+
+- Django 2.1.5
+
+- Celery
+
+- RabbitMQ
+
+Tested on macOS 10.12.6 Sierra

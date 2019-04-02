@@ -4,8 +4,6 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import NxfRun, NxfLogMessage
 from .tasks import add, start_pipeline, store_Nxf_weblog_message
-# from .settings import NXF_WEBLOG, NXF_LOG, NXF_SCRIPT
-# from .forms import NextflowStartForm
 import logging
 import subprocess as sp
 import datetime
@@ -21,6 +19,16 @@ def index(request):
     logger.info("processing index request")
     template = "dashboard/index.html"
     context = {}
+    return render(request, template, context)
+
+def runs(request):
+    """
+    View to show the available Nextflow runs in the database
+    """
+    all_runs = NxfRun.objects.distinct()
+    # print(all_runs)
+    template = "dashboard/runs.html"
+    context = {'all_runs': all_runs}
     return render(request, template, context)
 
 @csrf_exempt
