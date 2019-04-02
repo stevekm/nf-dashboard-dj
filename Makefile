@@ -98,7 +98,8 @@ shell:
 # https://www.rabbitmq.com/configure.html#customise-environment
 # https://www.rabbitmq.com/relocate.html
 export RABBITMQ_CONFIG_FILE:=conf/rabbitmq
-export RABBITMQ_NODENAME:=rabbit@$(shell hostname)
+# export RABBITMQ_NODENAME:=rabbit@$(shell hostname)
+export RABBITMQ_NODENAME:=rabbit
 export RABBITMQ_NODE_IP_ADDRESS:=127.0.0.1
 export RABBITMQ_NODE_PORT:=5674
 export RABBITMQ_LOG_BASE:=$(LOG_DIR_ABS)
@@ -144,6 +145,8 @@ celery-stop:
 
 rabbitmq-start:
 	rabbitmq-server -detached
+rabbitmq-start-inter:
+	rabbitmq-server
 rabbitmq-stop:
 	rabbitmqctl stop
 rabbitmq-check:
