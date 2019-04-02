@@ -41,7 +41,8 @@ conda-install: conda
 	pip install \
 	celery==4.3.0 \
 	django-celery-results==1.0.4 \
-	django-celery-beat==1.4.0
+	django-celery-beat==1.4.0 \
+	flower==0.9.3
 
 # celery=4.2.1 \ # not compatible with py3.7...
 test1:
@@ -112,19 +113,24 @@ CELERY_DEFAULT_LOGFILE:=$(LOG_DIR_ABS)/celery.default.log
 CELERY_NEXTFLOW_PID_FILE:=$(LOG_DIR_ABS)/celery.nextflow.pid
 CELERY_NEXTFLOW_LOGFILE:=$(LOG_DIR_ABS)/celery.nextflow.log
 export CELERY_BROKER_URL:=amqp://$(RABBITMQ_NODE_IP_ADDRESS):$(RABBITMQ_NODE_PORT)
+export FLOWER_PORT:=5555
+export FLOWER_ADDRESS:=127.0.0.1
+FLOWER_LOGFILE:=$(LOG_DIR_ABS)/celery.flower.log
+FLOWER_PID_FILE:=$(LOG_DIR_ABS)/celery.flower.pid
 # start 1 concurrent worker for Nextflow and 2 for all other tasks
 celery-start:
 	celery worker --app dashboard --loglevel info --pidfile "$(CELERY_DEFAULT_PID_FILE)" --logfile "$(CELERY_DEFAULT_LOGFILE)" --queues=default --concurrency=2 --hostname=default@%h --detach
 	celery worker --app dashboard --loglevel info --pidfile "$(CELERY_NEXTFLOW_PID_FILE)" --logfile "$(CELERY_NEXTFLOW_LOGFILE)" --queues=run_nextflow --concurrency=1 --hostname=nextflow@%h --detach
+# celery flower --app dashboard --logfile "$(FLOWER_LOGFILE)" --pidfile "$(FLOWER_PID_FILE)" --broker="$(CELERY_BROKER_URL)" --address="$(FLOWER_ADDRESS)" --port="$(FLOWER_PORT)" --detach # access at http://127.0.0.1:5555/
 
 # interactive for debugging
-celery-start-inter:
-	echo "$(CELERY_BROKER_URL)"
-	celery worker \
-	--app dashboard \
-	--loglevel debug \
-	--concurrency=1 \
-	--broker "$(CELERY_BROKER_URL)"
+# celery-start-inter:
+# 	echo "$(CELERY_BROKER_URL)"
+# 	celery worker \
+# 	--app dashboard \
+# 	--loglevel debug \
+# 	--concurrency=1 \
+# 	--broker "$(CELERY_BROKER_URL)"
 
 test2:
 	celery -h
